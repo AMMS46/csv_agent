@@ -1,0 +1,6 @@
+langchain
+pandas
+tabulate
+langchain-experimental
+langchain-google-genai
+fastapi
