@@ -8,14 +8,14 @@ import io
 import os
 from dotenv import load_dotenv
 
-# Load environment variables
+
 load_dotenv()
 
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 app = FastAPI()
 
-# Allow CORS for your React frontend
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Adjust this to your frontend's URL
@@ -24,7 +24,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize the LangChain agent (will be set later)
+
 agent = None
 
 class QueryRequest(BaseModel):
@@ -34,7 +34,7 @@ class QueryRequest(BaseModel):
 async def upload_file(file: UploadFile = File(...)):
     global agent
     try:
-        # Read the uploaded file into a pandas DataFrame
+        
         if file.filename.endswith('.csv'):
             df = pd.read_csv(file.file)
         elif file.filename.endswith('.xlsx'):
@@ -42,12 +42,12 @@ async def upload_file(file: UploadFile = File(...)):
         else:
             raise HTTPException(status_code=400, detail="Unsupported file type")
 
-        # Save the DataFrame to a CSV file-like object
+        
         csv_buffer = io.StringIO()
         df.to_csv(csv_buffer, index=False)
         csv_buffer.seek(0)
 
-        # Initialize the LangChain agent with the CSV file-like object
+        
         if not GOOGLE_API_KEY:
             raise HTTPException(status_code=500, detail="Google API key not found")
 
